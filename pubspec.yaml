@@ -1,0 +1,6 @@
+name: flutter_redurx
+version: 0.1.0
+description: Flutter bindings for ReduRx.
+
+dependencies:
+  redurx:
