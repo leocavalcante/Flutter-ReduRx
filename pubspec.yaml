@@ -3,4 +3,8 @@ version: 0.1.0
 description: Flutter bindings for ReduRx.
 
 dependencies:
+  flutter:
+    sdk: flutter
+
   redurx:
+    path: ../redurx

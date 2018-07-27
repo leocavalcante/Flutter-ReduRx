@@ -1,8 +1,3 @@
-# Flutter-ReduRx
-Flutter bindings for [ReduRx](https://github.com/leocavalcante/ReduRx).
-
-## Usage
-```dart
 import 'package:flutter/material.dart' hide State;
 import 'package:flutter_redurx/flutter_redurx.dart';
 
@@ -69,4 +64,3 @@ class MyHomePage extends StatelessWidget {
         ));
   }
 }
-```
