@@ -61,7 +61,7 @@ class _ConnectState<S, P> extends State<Connect<S, P>> {
 
         return false;
       }),
-      builder: (context, snapshot) => builder(snapshot.data),
+      builder: (context, snapshot) => snapshot.data != null ? builder(snapshot.data) : Container(),
     );
   }
 }
