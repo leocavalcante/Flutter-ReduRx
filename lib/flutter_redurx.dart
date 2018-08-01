@@ -31,7 +31,7 @@ class Connect<S, P> extends StatefulWidget {
     this.convert,
     this.where,
     this.builder,
-  });
+  }) : super(key: key);
 
   final P Function(S state) convert;
   final bool Function(P oldState, P newState) where;
