@@ -24,9 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter-ReduRx Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
+      theme: ThemeData(primarySwatch: Colors.pink),
       home: MyHomePage(),
     );
   }
@@ -40,7 +38,10 @@ class MyHomePage extends StatelessWidget {
           title: Connect<State, String>(
             convert: (state) => state.title,
             where: (prev, next) => next != prev,
-            builder: (title) => Text(title),
+            builder: (title) {
+              print('Building title: $title');
+              return Text(title);
+            },
           ),
         ),
         body: Center(
@@ -51,8 +52,11 @@ class MyHomePage extends StatelessWidget {
               Connect<State, String>(
                 convert: (state) => state.count.toString(),
                 where: (prev, next) => next != prev,
-                builder: (count) =>
-                    Text(count, style: Theme.of(context).textTheme.display1),
+                builder: (count) {
+                  print('Building counter: $count');
+                  return Text(count,
+                      style: Theme.of(context).textTheme.display1);
+                },
               ),
             ],
           ),
