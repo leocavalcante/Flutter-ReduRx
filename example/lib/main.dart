@@ -40,7 +40,7 @@ class MyHomePage extends StatelessWidget {
           title: Connect<State, String>(
             convert: (state) => state.title,
             where: (prev, next) => next != prev,
-            builder: (title) => Text(title ?? ''),
+            builder: (title) => Text(title),
           ),
         ),
         body: Center(
@@ -51,8 +51,8 @@ class MyHomePage extends StatelessWidget {
               Connect<State, String>(
                 convert: (state) => state.count.toString(),
                 where: (prev, next) => next != prev,
-                builder: (count) => Text(count ?? '',
-                    style: Theme.of(context).textTheme.display1),
+                builder: (count) =>
+                    Text(count, style: Theme.of(context).textTheme.display1),
               ),
             ],
           ),

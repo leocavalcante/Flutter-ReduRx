@@ -1,5 +1,7 @@
 library flutter_redurx;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:redurx/redurx.dart';
 
@@ -48,20 +50,31 @@ class _ConnectState<S, P> extends State<Connect<S, P>> {
   final Widget Function(P state) builder;
 
   P _prev;
+  Store<S> _store;
+  Stream<P> _stream;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _store = Provider.of<S>(context).store;
+    _stream = _store.stream
+        .map<P>(widget.convert)
+        .where((next) => widget.where(_prev, next));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<S>(context).store;
     return StreamBuilder<P>(
-      stream: store.map<P>(widget.convert).where((next) {
-        if (widget.where(_prev, next)) {
-          _prev = next;
-          return true;
+      stream: _stream,
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return Container();
         }
 
-        return false;
-      }),
-      builder: (context, snapshot) => snapshot.data != null ? builder(snapshot.data) : Container(),
+        _prev = snapshot.data;
+        return builder(_prev);
+      },
     );
   }
 }
