@@ -1,5 +1,5 @@
 name: flutter_redurx
-version: 0.3.1+5
+version: 0.4.1+5
 description: Flutter bindings for ReduRx.
 author: leocavalcante <lc@leocavalcante.com>
 homepage: https://github.com/leocavalcante/ReduRx
@@ -8,7 +8,7 @@ environment:
   sdk: ">=2.0.0-dev <3.0.0"
 
 dependencies:
-  redurx: ^0.2.0+11
+  redurx: ^0.3.0+11
   flutter:
     sdk: flutter
 
