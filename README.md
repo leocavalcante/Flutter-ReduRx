@@ -1,5 +1,7 @@
 # Flutter-ReduRx
 Flutter bindings for [ReduRx](https://github.com/leocavalcante/ReduRx).
+It provides a `Provider` as an `InheritedWidget` so you can reach the ReduRx Store wherever you have a `BuildContext`.
+It also has a `Connect` Widget so you can grab a few parts of the State (sub-state/props) and it will automatically recall `builder` whenever **only this little connected part of the State has changed** preventing unnecessary rebuilds.
 
 ## Usage
 ```dart
