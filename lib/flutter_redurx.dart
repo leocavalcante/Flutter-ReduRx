@@ -10,8 +10,8 @@ export 'package:redurx/redurx.dart';
 class Provider<T> extends InheritedWidget {
   Provider({
     Key key,
-    Widget child,
-    this.store,
+    @required Widget child,
+    @required this.store,
   }) : super(key: key, child: child);
   final Store<T> store;
 
@@ -30,9 +30,9 @@ class Provider<T> extends InheritedWidget {
 class Connect<S, P> extends StatefulWidget {
   Connect({
     Key key,
-    this.convert,
-    this.where,
-    this.builder,
+    @required this.convert,
+    @required this.where,
+    @required this.builder,
   }) : super(key: key);
 
   final P Function(S state) convert;
