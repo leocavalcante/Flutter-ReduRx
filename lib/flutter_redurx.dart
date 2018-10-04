@@ -33,21 +33,24 @@ class Connect<S, P> extends StatefulWidget {
     @required this.convert,
     @required this.where,
     @required this.builder,
+    this.nullable = false,
   }) : super(key: key);
 
   final P Function(S state) convert;
   final bool Function(P oldState, P newState) where;
   final Widget Function(P state) builder;
+  final bool nullable;
 
   @override
-  _ConnectState createState() => _ConnectState<S, P>(where, builder);
+  _ConnectState createState() => _ConnectState<S, P>(where, builder, nullable);
 }
 
 class _ConnectState<S, P> extends State<Connect<S, P>> {
-  _ConnectState(this.where, this.builder);
+  _ConnectState(this.where, this.builder, this.nullable);
 
   final bool Function(P oldState, P newState) where;
   final Widget Function(P state) builder;
+  final bool nullable;
 
   P _prev;
   Store<S> _store;
@@ -68,7 +71,7 @@ class _ConnectState<S, P> extends State<Connect<S, P>> {
     return StreamBuilder<P>(
       stream: _stream,
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        if (snapshot.data == null && !nullable) {
           return Container();
         }
 

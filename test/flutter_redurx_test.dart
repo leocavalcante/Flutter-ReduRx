@@ -107,4 +107,21 @@ void main() async {
 
     expect(find.text('1'), findsOneWidget);
   });
+
+  testWidgets('Nullable Connect should build even for null values.',
+      (tester) async {
+    final store = Store(State(0));
+
+    final fixture = Connect<State, int>(
+      convert: (state) => state.count,
+      where: (prev, next) => next != prev,
+      builder: (count) => Text(count == null ? 'null' : count.toString(),
+          textDirection: TextDirection.ltr),
+      nullable: true,
+    );
+
+    await tester.pumpWidget(Provider(store: store, child: fixture));
+
+    expect(find.text('null'), findsOneWidget);
+  });
 }
