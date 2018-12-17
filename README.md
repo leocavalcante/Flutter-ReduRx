@@ -23,9 +23,9 @@ Connect<State, String>(
 )
 ```
 
-##### Handling null values
-By default, `Connect` will only call [builder] if the props aren't [null], otherwise it renders an empty [Container].
-If you want to handle null values by youself, set the `nullable` property to [true]:
+#### Handling null values
+By default, `Connect` will only call `builder` if the props aren't `null`, otherwise it renders an empty `Container`.
+If you want to handle null values by youself, set the `nullable` property to `true`:
 
 ```dart
 Connect<State, String>(
