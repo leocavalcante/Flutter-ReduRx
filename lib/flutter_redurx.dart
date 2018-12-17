@@ -1,3 +1,4 @@
+/// Flutter bindings for ReduRx (A thin layer of a Redux-based state manager on top of RxDart).
 library flutter_redurx;
 
 import 'dart:async';
@@ -7,6 +8,7 @@ import 'package:redurx/redurx.dart';
 
 export 'package:redurx/redurx.dart';
 
+/// Provider Widget to be on top of the App ([child]) providing the State from a given [store].
 class Provider<T> extends InheritedWidget {
   Provider({
     Key key,
@@ -15,19 +17,26 @@ class Provider<T> extends InheritedWidget {
   }) : super(key: key, child: child);
   final Store<T> store;
 
+  /// Gets the Provider from a given [BuildContext].
   static Provider<T> of<T>(BuildContext context) =>
       context.inheritFromWidgetOfExactType(_targetType<Provider<T>>());
 
   static _targetType<T>() => T;
 
+  /// Sugar to dispatch Actions on the Store in the Provider of the given [context].
   static Store<T> dispatch<T>(BuildContext context, ActionType action) =>
       Provider.of<T>(context).store.dispatch(action);
 
+  /// We never trigger update, this is all up to ReduRx.
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => false;
 }
 
+/// The Widget that connects the State to a [builder] function.
 class Connect<S, P> extends StatefulWidget {
+  /// [convert] is how you map the State to [builder] props.
+  /// With [where] you can filter when the Widget should re-render, this is very important!
+  /// If you want to handle [null] values on the [builder] by yourself, set [nullable] to [true].
   Connect({
     Key key,
     @required this.convert,
