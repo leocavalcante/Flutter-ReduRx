@@ -21,7 +21,7 @@ class Counter extends StatelessWidget {
           Connect<State, int>(
             convert: (state) => state.count,
             where: (prev, next) => next != prev,
-            builder: (counter) => Text(counter.toString()),
+            builder: (counter, child) => Text(counter.toString()),
           ),
           RaisedButton(
             onPressed: () => Provider.dispatch<State>(context, Increment()),
@@ -29,6 +29,19 @@ class Counter extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CallbackWidget extends StatelessWidget {
+  final void Function(BuildContext) callback;
+  final Widget child;
+
+  const CallbackWidget(this.callback, {this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    callback(context);
+    return child ?? Container();
   }
 }
 
@@ -48,7 +61,7 @@ void main() async {
     final fixture = Connect<State, int>(
       convert: (state) => state.count,
       where: (prev, next) => next != prev,
-      builder: (count) => Text(count.toString()),
+      builder: (count, child) => Text(count.toString()),
     );
 
     await tester.pumpWidget(Provider(store: store, child: fixture));
@@ -62,7 +75,7 @@ void main() async {
     final fixture = Connect<State, int>(
       convert: (state) => state.count,
       where: (prev, next) => next != prev,
-      builder: (count) =>
+      builder: (count, child) =>
           Text(count.toString(), textDirection: TextDirection.ltr),
     );
 
@@ -78,7 +91,7 @@ void main() async {
     final fixture = Connect<State, int>(
       convert: (state) => state.count,
       where: (prev, next) => next != prev,
-      builder: (count) =>
+      builder: (count, child) =>
           Text(count.toString(), textDirection: TextDirection.ltr),
     );
 
@@ -115,7 +128,7 @@ void main() async {
     final fixture = Connect<State, int>(
       convert: (state) => state.count,
       where: (prev, next) => next != prev,
-      builder: (count) => Text(count == null ? 'null' : count.toString(),
+      builder: (count, child) => Text(count == null ? 'null' : count.toString(),
           textDirection: TextDirection.ltr),
       nullable: true,
     );
@@ -123,5 +136,46 @@ void main() async {
     await tester.pumpWidget(Provider(store: store, child: fixture));
 
     expect(find.text('null'), findsOneWidget);
+  });
+
+  testWidgets('does not rebuild child', (tester) async {
+    int childBuilds = 0;
+    int builderBuilds = 0;
+
+    final callbackChild = CallbackWidget((_) {
+      childBuilds++;
+    });
+
+    final store = Store(State(0));
+
+    final fixture = Connect<State, int>(
+      convert: (state) => state.count,
+      where: (prev, next) => next != prev,
+      builder: (count, child) {
+        return CallbackWidget(
+          (_) {
+            builderBuilds++;
+          },
+          child: child,
+        );
+      },
+      child: callbackChild,
+    );
+
+    await tester.pumpWidget(Provider(store: store, child: fixture));
+    expect(childBuilds, 0);
+    expect(builderBuilds, 0);
+
+    // first build, both child and builder should run
+    store.dispatch(Increment());
+    await tester.pumpAndSettle();
+    expect(childBuilds, 1);
+    expect(builderBuilds, 1);
+
+    // second build, child should not be rebuilt
+    store.dispatch(Increment());
+    await tester.pumpAndSettle();
+    expect(childBuilds, 1);
+    expect(builderBuilds, 2);
   });
 }

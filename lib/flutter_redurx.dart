@@ -43,23 +43,36 @@ class Connect<S, P> extends StatefulWidget {
     @required this.where,
     @required this.builder,
     this.nullable = false,
+    this.child,
   }) : super(key: key);
 
   final P Function(S state) convert;
   final bool Function(P oldState, P newState) where;
-  final Widget Function(P state) builder;
+  final Widget Function(P state, Widget child) builder;
   final bool nullable;
 
+  /// If the pre-built subtree is passed as the [child] parameter, it
+  /// will pass it back to the [builder] function so that it
+  /// can be incorporated into the build.
+  ///
+  /// Using this pre-built child is entirely optional, but can improve
+  /// performance significantly in some cases and is therefore a good practice.
+  final Widget child;
+
   @override
-  _ConnectState createState() => _ConnectState<S, P>(where, builder, nullable);
+  _ConnectState createState() =>
+      _ConnectState<S, P>(where, builder, nullable, child);
 }
 
 class _ConnectState<S, P> extends State<Connect<S, P>> {
-  _ConnectState(this.where, this.builder, this.nullable);
+  _ConnectState(this.where, this.builder, this.nullable, this.child);
 
   final bool Function(P oldState, P newState) where;
-  final Widget Function(P state) builder;
+  final Widget Function(P state, Widget child) builder;
   final bool nullable;
+
+  /// The part of the widget tree not rebuilt on change.
+  final Widget child;
 
   P _prev;
   Store<S> _store;
@@ -85,7 +98,7 @@ class _ConnectState<S, P> extends State<Connect<S, P>> {
         }
 
         _prev = snapshot.data;
-        return builder(_prev);
+        return builder(_prev, child);
       },
     );
   }

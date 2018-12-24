@@ -38,7 +38,7 @@ class MyHomePage extends StatelessWidget {
           title: Connect<State, String>(
             convert: (state) => state.title,
             where: (prev, next) => next != prev,
-            builder: (title) {
+            builder: (title, child) {
               print('Building title: $title');
               return Text(title);
             },
@@ -52,7 +52,7 @@ class MyHomePage extends StatelessWidget {
               Connect<State, String>(
                 convert: (state) => state.count.toString(),
                 where: (prev, next) => next != prev,
-                builder: (count) {
+                builder: (count, child) {
                   print('Building counter: $count');
                   return Text(count,
                       style: Theme.of(context).textTheme.display1);
