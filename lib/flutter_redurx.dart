@@ -44,6 +44,14 @@ class Connect<S, P> extends StatefulWidget {
     @required this.builder,
     this.nullable = false,
   }) : super(key: key);
+  
+  Connect.distinct({
+    Key key,
+    @required this.convert,
+    @required this.builder,
+    this.where = (oldState, newState) => oldState != newState,
+    this.nullable = false,
+  }) : super(key: key);
 
   final P Function(S state) convert;
   final bool Function(P oldState, P newState) where;
