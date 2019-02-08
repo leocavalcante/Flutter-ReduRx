@@ -40,14 +40,6 @@ class Connect<S, P> extends StatefulWidget {
   Connect({
     Key key,
     @required this.convert,
-    @required this.where,
-    @required this.builder,
-    this.nullable = false,
-  }) : super(key: key);
-  
-  Connect.distinct({
-    Key key,
-    @required this.convert,
     @required this.builder,
     this.where = (oldState, newState) => oldState != newState,
     this.nullable = false,
