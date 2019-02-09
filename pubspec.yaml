@@ -1,5 +1,5 @@
 name: flutter_redurx
-version: 1.0.0+1
+version: 1.1.0
 description: Flutter bindings for ReduRx (A thin layer of a Redux-based state manager on top of RxDart).
 author: leocavalcante <lc@leocavalcante.com>
 homepage: https://github.com/leocavalcante/ReduRx
