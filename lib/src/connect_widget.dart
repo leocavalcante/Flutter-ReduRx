@@ -13,7 +13,8 @@ abstract class ConnectWidget<S, P> extends StatefulWidget {
   Widget build(BuildContext context, P props);
 
   /// Sugar to dispatch actions without calling the Provider.
-  void dispatch(BuildContext context, ActionType action) => Provider.dispatch<S>(context, action);
+  void dispatch(BuildContext context, ActionType action) =>
+      Provider.dispatch<S>(context, action);
 
   @override
   State<StatefulWidget> createState() => _ConnectWidgetState<S, P>();
