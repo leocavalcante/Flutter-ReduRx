@@ -8,6 +8,8 @@ class Provider<T> extends InheritedWidget {
     @required Widget child,
     @required this.store,
   }) : super(key: key, child: child);
+
+  /// The ReduRx Store.
   final Store<T> store;
 
   /// Gets the Provider from a given [BuildContext].
@@ -19,6 +21,10 @@ class Provider<T> extends InheritedWidget {
   /// Sugar to dispatch Actions on the Store in the Provider of the given [context].
   static Store<T> dispatch<T>(BuildContext context, ActionType action) =>
       Provider.of<T>(context).store.dispatch(action);
+
+  /// Sugar to access the state from Provider.
+  static T state<T>(BuildContext context) =>
+      Provider.of<T>(context).store.state;
 
   /// We never trigger update, this is all up to ReduRx.
   @override
