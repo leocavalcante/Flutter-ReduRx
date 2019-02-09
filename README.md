@@ -23,6 +23,48 @@ Connect<State, String>(
 )
 ```
 
+#### Example
+```dart
+class Example1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Connect<AppState, String>(
+            convert: (state) => state.title,
+            where: (prev, next) => next != prev,
+            builder: (title) {
+              print('Building title: $title');
+              return Text(title);
+            },
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('You have pushed the button this many times:'),
+              Connect<AppState, String>(
+                convert: (state) => state.count.toString(),
+                where: (prev, next) => next != prev,
+                builder: (count) {
+                  print('Building counter: $count');
+                  return Text(count,
+                      style: Theme.of(context).textTheme.display1);
+                },
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Provider.dispatch<AppState>(context, Increment()),
+          tooltip: 'Increment',
+          child: Icon(Icons.add),
+        ));
+  }
+}
+```
+
 #### Handling null values
 By default, `Connect` will only call `builder` if the props aren't `null`, otherwise it renders an empty `Container`.
 If you want to handle null values by youself, set the `nullable` property to `true`:
@@ -34,6 +76,50 @@ Connect<State, String>(
   builder: (title) => Text(title),
   nullable: true,
 )
+```
+
+### ConnectWidget
+Behaves just like `Connect` but is extendable. Very useful when you see yourself in a Widget with a lot of `Connect`s.
+
+#### Example
+```dart
+class _Props {
+  _Props({
+    @required this.title,
+    @required this.count,
+  });
+
+  final String title;
+  final String count;
+}
+
+class Example2 extends ConnectWidget<AppState, _Props> {
+  @override
+  _Props convert(AppState state) {
+    return _Props(title: state.title, count: state.count.toString());
+  }
+
+  @override
+  Widget build(BuildContext context, _Props props) {
+    return Scaffold(
+      appBar: AppBar(title: Text(props.title)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('You have pushed the button this many times:'),
+            Text(props.count, style: Theme.of(context).textTheme.display1),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => dispatch(context, Increment()),
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
 ```
 
 ### Provider
