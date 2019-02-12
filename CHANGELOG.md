@@ -1,14 +1,14 @@
-## [1.1.0] - 2019-02-09
-* Add `ConnectWidget`!
+# 1.1.1
+* Add `ConnectState`
 
-## [1.0.0] - 2018-12-17
+# 1.1.0
+* Add `ConnectWidget`
 
-* Stable and documented API.
+# 1.0.0
+* Stable and documented API
 
-## [0.4.3] - 2018-10-03
+# 0.4.3
+* `Connect` accepts null values by the explicit set of the `nullable` attribute
 
-* `Connect` accepts null values by the explicit set of the `nullable` attribute.
-
-## [0.4.2] - 2018-08-06
-
-* Added `@required` annotations.
+# 0.4.2
+* Added `@required` annotations
