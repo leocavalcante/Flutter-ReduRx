@@ -8,7 +8,8 @@ environment:
   sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
-  redurx: ^1.1.0
+  redurx:
+    path: ../ReduRx
   flutter:
     sdk: flutter
 

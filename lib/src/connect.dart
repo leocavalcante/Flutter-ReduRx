@@ -1,8 +1,10 @@
-/// The Widget that connects the State to a [builder] function.
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redurx/src/provider.dart';
 import 'package:redurx/redurx.dart';
 
+/// The Widget that connects the State to a [builder] function.
 class Connect<S, P> extends StatefulWidget {
   /// [convert] is how you map the State to [builder] props.
   /// With [where] you can filter when the Widget should re-render, this is very important!

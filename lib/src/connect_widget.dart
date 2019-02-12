@@ -1,32 +1,50 @@
-/// Behaves just like Connect but is extendable. Very useful when you see yourself in a Widget with a lot of Connects.
-import 'package:flutter/widgets.dart';
-import 'package:flutter_redurx/flutter_redurx.dart';
+import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+import 'package:flutter_redurx/src/provider.dart';
+import 'package:redurx/redurx.dart';
+
+@immutable
 abstract class ConnectWidget<S, P> extends StatefulWidget {
-  /// [convert] is how you map the State to [builder] props.
+  const ConnectWidget({Key key, this.nullable = false}) : super(key: key);
+
+  final bool nullable;
+
   P convert(S state);
 
-  /// With [where] you can filter when the Widget should re-render, this is very important!
-  bool where(P oldProps, P newProps) => newProps != oldProps;
-
-  /// If you want to handle [null] values on the [builder] by yourself, set [nullable] to [true].
-  Widget build(BuildContext context, P props);
-
-  /// Sugar to dispatch actions without calling the Provider.
-  void dispatch(BuildContext context, ActionType action) =>
-      Provider.dispatch<S>(context, action);
-
-  @override
-  State<StatefulWidget> createState() => _ConnectWidgetState<S, P>();
+  bool where(P oldState, P newState) =>
+      oldState != null && newState != null && newState != oldState;
 }
 
-class _ConnectWidgetState<S, P> extends State<ConnectWidget<S, P>> {
+abstract class ConnectState<S, P, W extends ConnectWidget<S, P>>
+    extends State<W> {
+  P _props;
+  StreamSubscription<P> _subscription;
+
+  P get props => _props;
+
+  Store<S> dispatch(ActionType action) => Provider.dispatch<S>(context, action);
+
   @override
-  Widget build(BuildContext context) {
-    return Connect<S, P>(
-      convert: widget.convert,
-      where: widget.where,
-      builder: (P props) => widget.build(context, props),
-    );
+  void didChangeDependencies() {
+    final store = Provider.of<S>(context).store;
+
+    _subscription = store.stream
+        .map<P>(widget.convert)
+        .where((next) => widget.where(_props, next))
+        .listen((props) {
+      setState(() => _props = props);
+    });
+
+    _props = widget.convert(store.state);
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void deactivate() {
+    _subscription.cancel();
+
+    super.deactivate();
   }
 }
