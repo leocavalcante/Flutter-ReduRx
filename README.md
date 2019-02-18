@@ -1,3 +1,6 @@
+Please, check out: https://github.com/leocavalcante/observable_state
+--
+
 # Flutter-ReduRx [![Build Status](https://travis-ci.org/leocavalcante/Flutter-ReduRx.svg?branch=master)](https://travis-ci.org/leocavalcante/Flutter-ReduRx)
 
 Flutter bindings for [ReduRx](https://github.com/leocavalcante/ReduRx).
